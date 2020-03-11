@@ -2,48 +2,101 @@
  
 ## 1 - Como organizar modelos em modulos?
 
--Criar uma pasta models, criar um arquivo __init__.py contendo os import´s das entidades modelos.
+Um scripty Python é considerao como Módulo, um diretório(pasta) é indicado como pacote quando este conta com a presença do arquivo __int__.py
+Um pacote pode conter vários outros módulos
+Então pasta criar uma pasta models e dentro desta pasta criar um arquivo arquivo __int__.py
+ onde terá os import dos módulos
 
 ## 2 - Como criar modelos com heranças? De quais tipos?
-
 ```
 from django.db import models
 
 class Pessoa(models.Model):
-    class Meta:
-        abstract = True
-
     nome = models.CharField(max_length=100)
-    data_nascimento = models.DateField()
+    cpf = models.CharField(max_length=11)
+    datanascimento = models.DateField()
     endereco = models.CharField(max_length=100)
+    genero = models.CharField(max_length=9)
 
 class Cliente(Pessoa):
     compra_sempre = models.BooleanField(default=False)
 
 class Funcionario(Pessoa):
+    matricula = models.DecimalField(max_digits=5)
     ctps = models.CharField(max_length=25)
     salario = models.DecimalField(max_digits=15, decimal_places=2)
+    departamento = models.CharField(max_length=30)
+
+class Gerente(Funcionario):
+    plr = models.DecimalField(max_digits=15, decimal_places=2)
+    
 ```
 
 ## 3 - Como criar Enumeration type e usar como choices?
 
 ```
-from django.db import modelsclass Student(models.Model):
+from django.db import modelsclass UF(models.Model):
     # Constants in Model class
-    FRESHMAN = 'FR'
-    SOPHOMORE = 'SO'
-    JUNIOR = 'JR'
-    SENIOR = 'SR'
-    YEAR_IN_SCHOOL_CHOICES = (
-        (FRESHMAN, 'Freshman'),
-        (SOPHOMORE, 'Sophomore'),
-        (JUNIOR, 'Junior'),
-        (SENIOR, 'Senior'),
+    ACRE = 'AC'	
+    ALAGOAS = 'AL'
+    AMAPA = 'AP'
+    AMAZONAS = 'AM'
+    BAHIA = 'BA'
+    CEARA = 'CE'
+    DISTRITO FEDERAL = 'DF'
+    ESPIRITO SANTO = 'ES'
+    GOAIS = 'GO'
+    MARANHAO = 'MA'
+    MATO GROSSO = 'MT'
+    MATO GROSSO DO SUL = 'MS'
+    MINAS GERAIS = 'MG'
+    PARA = 'PA'
+    PARAIBA = 'PB'
+    PARANA = 'PR'
+    PERNAMBUCO = 'PE'
+    PIAUI = 'PI'
+    RIO DE JANEIRO = 'RJ'
+    RIO GRANDE DO NORTE = 'RN'
+    RIO GRANDE DO SUL = 'RS'
+    RONDONIA = 'RO'
+    RORAIMA = 'RR'
+    SANTA CATARINA = 'SC'
+    SAO PAULAO = 'SP'
+    SERGIPE = 'SE'
+    TOCANTIS = 'TO'
+    ESTADOS_BRASIL_CHOICES = (
+        (ACRE,'Acre'),
+        (ALAGOAS, 'Alagoas'),
+        (AMAPA = 'Amapa'),
+        (AMAZONAS, 'Amazonas'),
+        (BAHIA, 'Bahia'),
+        (CEARA, 'Ceara'),
+        (DISTRITO FEDERAL, 'Distrito Federal')
+        (ESPIRITO SANTO, 'Espirito Santo'),
+        (GOAIS, 'Goias'),
+        (MARANHAO, 'Maranhao'),
+        (MATO GROSSO, 'Mato Grosso'),
+        (MATO GROSSO DO SUL, 'Mato Grosso do Sul'),
+        (MINAS GERAIS, 'Minas Gerais'),
+        (PARA, 'Para'),
+        (PARAIBA, 'Paraiba'),
+        (PARANA, 'Parana'),
+        (PERNAMBUCO, 'Pernambuco'),
+        (PIAUI, 'Piaui')
+        (RIO DE JANEIRO, 'Rio de Janeiro'),
+        (RIO GRANDE DO NORTE, 'Rio Grande do Norte'),
+        (RIO GRANDE DO SUL, 'Rio Grande do Sul'),
+        (RONDONIA, 'Rondonia'),
+        (RORAIMA, 'Roraima'),
+        (SANTA CATARINA, 'Santa Catarina'),
+        (SAO PAULAO, 'Sao Paulo'),
+        (SERGIPE, 'Sergipe'),
+        (TOCANTIS, 'Tocantis'),
     )
-    year_in_school = models.CharField(
-        max_length=2,
-        choices=YEAR_IN_SCHOOL_CHOICES,
-        default=FRESHMAN,
+    estados_brasil = models.CharField(
+        max_lenght=2,
+        choices=ESTADOS_BRSIL,
+        default=ACRE,
     )
 ```
 
@@ -104,10 +157,20 @@ class MyPerson(Person):
         # ...
         pass
 ```
+fonte: https://docs.djangoproject.com/en/3.0/topics/db/models/#proxy-models
 
 ## 6 - O que faz o método __srt__()?
-Equivalente ao tostring do metodo em java usado para sobscrever.
 
+__str__ é um método especial, como __init__, usado para retornar uma representação de string de um objeto.
+
+Por exemplo, aqui está um método str para objetos Time:
+
+```
+# dentro da classe Time:
+
+    def __str__(self):
+        return '%.2d:%.2d:%.2d' % (self.hour, self.minute, self.second)
+```
 
 ## 7 - Quais e para que servem as propriedades adicionais dos tipos de relacionamento/mapeamento?
 
@@ -125,15 +188,3 @@ ManyToManyField.symmetrical (Only used in the definition of ManyToManyFields on 
 
 To define a one-to-one relationship, use OneToOneField.
 OneToOneField.parent_link (When True and used in a model which inherits from another concrete model, indicates that this field should be used as the link back to the parent class, rather than the extra OneToOneField which would normally be implicitly created by subclassing.)
-© 2020 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
